@@ -1,0 +1,32 @@
+
+# Executables
+
+audiotest
+
+# CMake
+
+*.cmake
+CMakeFiles
+CMakeScripts
+CMakeCache.txt
+Makefile
+
+# IDES
+
+*.user
+*.cbp
+*.xcodeproj
+
+
+# XCode
+
+Debug
+Release
+
+
+
+# Treats
+
+*.swp
+.DS_Store
+
