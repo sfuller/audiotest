@@ -31,8 +31,6 @@ namespace Metalancer
 
         virtual int GetSamplingRateForNextRead() = 0;
         
-        virtual bool HasDataToRead() = 0;
-
         void FillWithZero(int samples, float* data);
 
         void QueueAction(Action action);
@@ -51,6 +49,8 @@ namespace Metalancer
         virtual void Play();
 
         virtual void Update(float timestep);
+
+        virtual bool HasDataToRead() = 0;
 
     };
 

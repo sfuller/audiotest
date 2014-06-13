@@ -62,7 +62,16 @@ AudioSystem::~AudioSystem()
 
 void AudioSystem::AddSound(Sound *sound)
 {
-    _sounds.push_back(sound);
+    std::lock_guard<mutex> lock(_mutex);
+
+    _sounds.insert(sound);
+}
+
+void AudioSystem::RemoveSound(Sound *sound)
+{
+    std::lock_guard<mutex> lock(_mutex);
+
+    _sounds.erase(sound);
 }
 
 /*
@@ -79,6 +88,9 @@ int AudioSystem::StreamCallback(const void *inputBuffer,
                                 void *userData)
 {
     UserData* data = (UserData*)userData;
+
+    std::lock_guard<mutex> lock(data->system->_mutex);
+
     float* out = (float*)outputBuffer;
 
     int soundCount = data->system->_sounds.size();
@@ -90,14 +102,17 @@ int AudioSystem::StreamCallback(const void *inputBuffer,
 
     int samplingRate = 44100;
 
-    for(int i = 0; i < soundCount; ++i)
+
+    for(unordered_set<Sound*>::iterator it = data->system->_sounds.begin(); it != data->system->_sounds.end(); ++it)
     {
+        Sound* sound = *it;
+
         int totalSamplesFilled = 0;
         while(totalSamplesFilled < framesPerBuffer)
         {
             int samplesFilled = 0;
             int returnedSamplingRate;
-            data->system->_sounds.at(i)->GetData(framesPerBuffer, samplingRate, data->_tempBuffer, samplesFilled, returnedSamplingRate);
+            sound->GetData(framesPerBuffer, samplingRate, data->_tempBuffer, samplesFilled, returnedSamplingRate);
             if(returnedSamplingRate == 0)
             {
                 continue;

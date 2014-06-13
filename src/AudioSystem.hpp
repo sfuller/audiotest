@@ -2,7 +2,9 @@
 #define METALANCER_AUDIOSYSTEM_HPP
 
 #include <portaudio.h>
-#include <vector>
+#include <unordered_set>
+
+#include <mutex>
 
 namespace Metalancer
 {
@@ -23,11 +25,13 @@ namespace Metalancer
             float* _tempBuffer;
         };
 
+        std::mutex _mutex;
+
         UserData _userData;
 
         PaStream* _stream;
 
-        std::vector<Sound*> _sounds;
+        std::unordered_set<Sound*> _sounds;
 
         static int StreamCallback(const void* inputBuffer,
                                   void* outputBuffer,
@@ -47,7 +51,7 @@ namespace Metalancer
 
         void AddSound(Sound* sound);
 
-        void PlaySound(const Sound& sound);
+        void RemoveSound(Sound* sound);
 
         void Play();
 

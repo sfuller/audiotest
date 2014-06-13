@@ -1,7 +1,8 @@
-#include "AudioSystem.hpp"
-#include "Sound.hpp"
-#include "VorbisSound.hpp"
-#include "PCMSound.hpp"
+#include "../src/AudioSystem.hpp"
+#include "../src/Sound.hpp"
+#include "../src/VorbisSound.hpp"
+#include "../src/PCMSound.hpp"
+#include "../src/PCMData.hpp"
 
 #include <lua.hpp>
 #include <string>
@@ -9,6 +10,7 @@
 
 using namespace Metalancer;
 
+PCMData soundData;
 PCMSound sound1;
 
 int play(lua_State* state)
@@ -26,7 +28,7 @@ int stop(lua_State* state)
 int load(lua_State* state)
 {
     const char* filename = luaL_checkstring(state, -1);
-    sound1.OpenFile(filename);
+    soundData.OpenFile(filename);
     return 0;
 }
 
@@ -56,6 +58,8 @@ int main(int argc, char** argv)
 
     //sound1.OpenFile("test.ogg");
     //sound2.OpenFile("hay.ogg");
+
+    sound1.SetData(&soundData);
 
     system.AddSound(&sound1);
     //system.AddSound(&sound2);

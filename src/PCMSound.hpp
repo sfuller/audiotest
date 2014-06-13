@@ -7,32 +7,14 @@
 namespace Metalancer
 {
 
+    class PCMData;
+
     class PCMSound : public Sound
     {
 
-        struct WaveHeader
-        {
-            // RIFF Chunk
-            char chunkId[4]; // "RIFF"
-            int chunkSize;
-            char format[4]; // "WAVE"
-            // fmt sub-chunk
-            char subchunk1Id[4]; // "fmt "
-            int subchunk1Size;
-            short audioFormat;
-            short numChannels;
-            int samplingRate;
-            int byteRate;
-            short blockAlign;
-            short bitsPerSample;
-            //data sub-chunk
-            char subcunk2Id[4]; // "data"
-            int subchunk2Size;
-        } _header;
 
-        char* _pcmData;
-        
-        bool _isOpen;
+        PCMData* _pcmData;
+
 
         unsigned int _currentReadPosition;
 
@@ -47,7 +29,7 @@ namespace Metalancer
         PCMSound();
         ~PCMSound();
 
-        bool OpenFile(const std::string& name);
+        void SetData(PCMData* data);
 
     };
 
